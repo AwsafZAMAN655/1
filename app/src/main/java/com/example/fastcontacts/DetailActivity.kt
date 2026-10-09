@@ -327,16 +327,56 @@ class DetailActivity : AppCompatActivity() {
 
     private fun openWhatsApp(number: String, actionType: String) {
         try {
-            val uri = when (actionType) {
-                "send" -> Uri.parse("https://api.whatsapp.com/send?phone=$number")
-                else -> Uri.parse("https://api.whatsapp.com/send?phone=$number")
+            // WhatsApp expects the full international number without +, spaces, or punctuation.
+            val cleanNumber = number.replace(Regex("[^0-9]"), "")
+            if (cleanNumber.isBlank()) {
+                Toast.makeText(
+                    this,
+                    "This contact does not have a valid phone number.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
             }
-            val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                when (actionType) {
+                    "send" -> {
+                        data = Uri.parse(
+                            "https://api.whatsapp.com/send?phone=$cleanNumber"
+                        )
+                    }
+
+                    "call" -> {
+                        data = Uri.parse(
+                            "whatsapp://call?phone=$cleanNumber"
+                        )
+                    }
+
+                    "videocall" -> {
+                        data = Uri.parse(
+                            "whatsapp://call?phone=$cleanNumber&video=true"
+                        )
+                    }
+
+                    else -> {
+                        Toast.makeText(
+                            this@DetailActivity,
+                            "Invalid WhatsApp action.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
+                }
                 setPackage("com.whatsapp")
             }
+
             startActivity(intent)
         } catch (e: Exception) {
-            Toast.makeText(this, "WhatsApp is not installed or number is invalid.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "WhatsApp is not installed or this action is unsupported.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 

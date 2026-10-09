@@ -1,3 +1,4 @@
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -18,14 +19,17 @@
         <package android:name="com.skype.raider" />
         <package android:name="com.snapchat.android" />
         <package android:name="com.google.android.apps.tachyon" />
+
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
         </intent>
+
         <intent>
             <action android:name="android.intent.action.SENDTO" />
             <data android:scheme="mailto" />
         </intent>
+
         <intent>
             <action android:name="android.intent.action.SENDTO" />
             <data android:scheme="smsto" />
@@ -35,7 +39,8 @@
     <application
         android:name=".FastContactsApp"
         android:allowBackup="true"
-        android:icon="@android:drawable/sym_def_app_icon"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
         android:label="Fast Contacts"
         android:supportsRtl="true"
         android:theme="@style/Theme.FastContacts">
@@ -44,18 +49,25 @@
             android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity android:name=".DetailActivity" />
+
         <activity
             android:name=".EditActivity"
             android:windowSoftInputMode="adjustResize" />
+
         <activity android:name=".OrganizeActivity" />
+
         <activity android:name=".SettingsActivity" />
 
     </application>
+
 </manifest>
+```
