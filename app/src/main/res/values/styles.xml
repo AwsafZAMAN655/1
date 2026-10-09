@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.FastContacts" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/app_accent</item>
+        <item name="colorOnPrimary">@color/app_on_accent</item>
+        <item name="colorPrimaryContainer">@color/app_accent_container</item>
+        <item name="colorOnPrimaryContainer">@color/app_on_accent_container</item>
+        <item name="colorSecondaryContainer">@color/app_accent_container</item>
+        <item name="colorOnSecondaryContainer">@color/app_on_accent_container</item>
+        <item name="colorSurface">@color/app_surface</item>
+        <item name="colorOnSurface">@color/app_text</item>
+        <item name="colorSurfaceVariant">@color/app_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/app_text_secondary</item>
+        <item name="colorOutline">@color/app_outline</item>
+        <item name="colorError">@color/app_danger</item>
+        <item name="android:colorBackground">@color/app_bg</item>
+        <item name="android:windowBackground">@color/app_bg</item>
+        <item name="android:statusBarColor">@color/app_bg</item>
+        <item name="android:navigationBarColor">@color/app_nav_bg</item>
+    </style>
+</resources>
