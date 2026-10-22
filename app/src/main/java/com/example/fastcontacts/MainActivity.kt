@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var favList: RecyclerView
     private lateinit var paneContacts: View
     private lateinit var paneDialpad: View
-    private lateinit var paneDialpad: View
     private lateinit var emptyContacts: View
     private lateinit var emptyFav: View
     private lateinit var emptyPermission: View
