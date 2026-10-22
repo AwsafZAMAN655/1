@@ -105,9 +105,15 @@ class MainActivity : AppCompatActivity() {
 
         dialpad = DialpadController(this, paneDialpad) { openDetail(it) }
 
-        search.doAfterTextChanged {
-            btnClear.visibility = if (it.isNullOrEmpty()) View.GONE else View.VISIBLE
-            applyFilter()
+        // Optimized search handler to prevent lag
+        var searchJob: kotlinx.coroutines.Job? = null
+        search.doAfterTextChanged { text ->
+            btnClear.visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
+            searchJob?.cancel()
+            searchJob = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+                kotlinx.coroutines.delay(200) // Debounce delay
+                applyFilter()
+            }
         }
         btnClear.setOnClickListener { search.setText("") }
 
