@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var list: RecyclerView
     private lateinit var favList: RecyclerView
     private lateinit var paneContacts: View
-    private lateinit var paneFavorites: View
+    private lateinit var paneDialpad: View
     private lateinit var paneDialpad: View
     private lateinit var emptyContacts: View
     private lateinit var emptyFav: View
@@ -88,10 +88,10 @@ class MainActivity : AppCompatActivity() {
         list = findViewById(R.id.list)
         favList = findViewById(R.id.favList)
         paneContacts = findViewById(R.id.paneContacts)
-        paneFavorites = findViewById(R.id.paneFavorites)
+        paneDialpad = findViewById(R.id.paneDialpad)
         paneDialpad = findViewById(R.id.paneDialpad)
         emptyContacts = findViewById(R.id.emptyContacts)
-        emptyFav = findViewById(R.id.emptyFavorites)
+        emptyFav = findViewById(R.id.emptyDialpad)
         emptyPermission = findViewById(R.id.emptyPermission)
         index = findViewById(R.id.alphabetIndex)
         bubble = findViewById(R.id.letterBubble)
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity() {
         updateChipsVisibility()
         if (t == 2) fab.hide() else fab.show()
         swap(paneContacts, t == 0)
-        swap(paneFavorites, t == 1)
+        swap(paneDialpad, t == 1)
         swap(paneDialpad, t == 2)
     }
 
@@ -326,12 +326,12 @@ class MainActivity : AppCompatActivity() {
         if (favResult.isEmpty()) {
             if (q.isBlank()) {
                 setEmpty(
-                    emptyFav, R.drawable.ic_star_border, "No favorites yet",
+                    emptyFav, R.drawable.ic_star_border, "No dialpad yet",
                     "Favorite people you contact often.", null, null
                 )
             } else {
                 setEmpty(
-                    emptyFav, R.drawable.ic_search, "No favorites found",
+                    emptyFav, R.drawable.ic_search, "No dialpad found",
                     "Try another name or phone number.", null, null
                 )
             }
@@ -379,7 +379,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         acts.add(Ui.SheetAction(
-            if (c.starred) "Remove from favorites" else "Add to favorites",
+            if (c.starred) "Remove from dialpad" else "Add to dialpad",
             if (c.starred) R.drawable.ic_star_border else R.drawable.ic_star
         ) {
             Actions.toggleStar(this, c)
