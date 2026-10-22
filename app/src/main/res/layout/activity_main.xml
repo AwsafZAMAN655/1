@@ -141,6 +141,13 @@
         </FrameLayout>
 
         <include
+            android:id="@+id/paneRecents"
+            layout="@layout/pane_recents"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <include
             android:id="@+id/paneDialpad"
             layout="@layout/pane_dialpad"
             android:layout_width="match_parent"

@@ -10,17 +10,39 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/dialDisplay"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="start"
-        android:gravity="center"
-        android:minHeight="64dp"
-        android:padding="8dp"
-        android:singleLine="true"
-        android:textColor="@color/app_text"
-        android:textSize="32sp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+        <View
+            android:layout_width="48dp"
+            android:layout_height="1dp" />
+
+        <TextView
+            android:id="@+id/dialDisplay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="start"
+            android:gravity="center"
+            android:minHeight="64dp"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:textColor="@color/app_text"
+            android:textSize="32sp" />
+
+        <ImageButton
+            android:id="@+id/btnBackspace"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Backspace"
+            android:src="@drawable/ic_backspace" />
+    </LinearLayout>
 
     <GridLayout
         android:id="@+id/keypad"
@@ -43,7 +65,7 @@
             android:layout_height="56dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Add to contacts"
-            android:src="@drawable/ic_person" />
+            android:src="@drawable/ic_person_add" />
 
         <ImageButton
             android:id="@+id/btnDialCall"
@@ -57,11 +79,11 @@
             android:tint="@color/app_on_call" />
 
         <ImageButton
-            android:id="@+id/btnBackspace"
+            android:id="@+id/btnDialSms"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Backspace"
-            android:src="@drawable/ic_backspace" />
+            android:contentDescription="Send message"
+            android:src="@drawable/ic_sms" />
     </LinearLayout>
 </LinearLayout>

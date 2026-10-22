@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_search"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_search" />
+
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="Search contacts"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="12dp"
+                android:paddingEnd="8dp"
+                android:textColor="@color/app_text"
+                android:textColorHint="@color/app_text_secondary"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/btnClearSearch"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Clear search"
+                android:src="@drawable/ic_close"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/btnMenu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="More options"
+                android:src="@drawable/ic_more" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/chipsScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true" />
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/paneContacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingEnd="22dp"
+                android:paddingBottom="96dp" />
+
+            <com.example.fastcontacts.AlphabetIndexView
+                android:id="@+id/alphabetIndex"
+                android:layout_width="26dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="88dp"
+                android:contentDescription="Alphabet index" />
+
+            <include
+                android:id="@+id/emptyContacts"
+                layout="@layout/view_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/paneFavorites"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="96dp" />
+
+            <include
+                android:id="@+id/emptyFavorites"
+                layout="@layout/view_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <include
+            android:id="@+id/paneDialpad"
+            layout="@layout/pane_dialpad"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/emptyPermission"
+            layout="@layout/view_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/app_bg"
+            android:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:contentDescription="Create contact"
+            android:src="@drawable/ic_add" />
+
+        <TextView
+            android:id="@+id/letterBubble"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:alpha="0"
+            android:background="@drawable/bg_bubble"
+            android:gravity="center"
+            android:textColor="@color/app_on_accent"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/app_nav_bg"
+        app:menu="@menu/bottom_nav" />
+</LinearLayout>

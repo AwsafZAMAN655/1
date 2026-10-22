@@ -3,7 +3,9 @@ package com.example.fastcontacts
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: ContactAdapter
     private lateinit var favAdapter: ContactAdapter
     private lateinit var dialpad: DialpadController
+    private lateinit var recents: RecentsController
     private lateinit var root: ViewGroup
     private lateinit var header: View
     private lateinit var search: EditText
@@ -42,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var paneContacts: View
     private lateinit var paneFavorites: View
     private lateinit var paneDialpad: View
+    private lateinit var paneRecents: View
     private lateinit var emptyContacts: View
     private lateinit var emptyFav: View
     private lateinit var emptyPermission: View
@@ -62,6 +66,20 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) {
         if (hasContactsPermission()) loadContacts() else applyFilter()
+    }
+
+    private val callLogLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            loadContacts()
+        } else if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_CALL_LOG)) {
+            // permanently denied: the only way left is the app settings page
+            Actions.toast(this, "Turn on Call logs permission in Settings")
+            startActivity(
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + packageName))
+            )
+        }
     }
 
     private val organizeLauncher = registerForActivityResult(
@@ -90,6 +108,7 @@ class MainActivity : AppCompatActivity() {
         paneContacts = findViewById(R.id.paneContacts)
         paneFavorites = findViewById(R.id.paneFavorites)
         paneDialpad = findViewById(R.id.paneDialpad)
+        paneRecents = findViewById(R.id.paneRecents)
         emptyContacts = findViewById(R.id.emptyContacts)
         emptyFav = findViewById(R.id.emptyFavorites)
         emptyPermission = findViewById(R.id.emptyPermission)
@@ -106,6 +125,7 @@ class MainActivity : AppCompatActivity() {
         favList.adapter = favAdapter
 
         dialpad = DialpadController(this, paneDialpad) { openDetail(it) }
+        recents = RecentsController(this, paneRecents, { openDetail(it) }) { requestCallLogPermission() }
 
         search.doAfterTextChanged {
             btnClear.visibility = if (it.isNullOrEmpty()) View.GONE else View.VISIBLE
@@ -137,12 +157,37 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_contacts -> showTab(0)
                 R.id.nav_favorites -> showTab(1)
+                R.id.nav_recents -> showTab(3)
                 R.id.nav_dialpad -> showTab(2)
             }
             true
         }
 
         if (!hasContactsPermission()) requestPermissions()
+        handleDialIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleDialIntent(intent)
+    }
+
+    override fun onDestroy() {
+        dialpad.release()
+        super.onDestroy()
+    }
+
+    // Other apps can hand us a tel: number: open the dialpad with it filled in.
+    private fun handleDialIntent(i: Intent?) {
+        val d = i?.data ?: return
+        if (d.scheme == "tel") {
+            dialpad.setNumber(Uri.decode(d.schemeSpecificPart ?: ""))
+            nav.selectedItemId = R.id.nav_dialpad
+        }
+    }
+
+    private fun requestCallLogPermission() {
+        callLogLauncher.launch(Manifest.permission.READ_CALL_LOG)
     }
 
     override fun onResume() {
@@ -170,7 +215,8 @@ class MainActivity : AppCompatActivity() {
             arrayOf(
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.WRITE_CONTACTS,
-                Manifest.permission.CALL_PHONE
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.READ_CALL_LOG
             )
         )
     }
@@ -182,25 +228,38 @@ class MainActivity : AppCompatActivity() {
         startActivity(i, opts.toBundle())
     }
 
-    private fun showTab(t: Int) {
-        tab = t
-        TransitionManager.beginDelayedTransition(root)
-        header.visibility = if (t == 2) View.GONE else View.VISIBLE
-        updateChipsVisibility()
-        if (t == 2) fab.hide() else fab.show()
-        swap(paneContacts, t == 0)
-        swap(paneFavorites, t == 1)
-        swap(paneDialpad, t == 2)
+    // tab ids: 0 contacts, 1 favorites, 2 dialpad, 3 recents
+    // visual order left to right: contacts, favorites, recents, dialpad
+    private fun order(t: Int): Int = when (t) {
+        3 -> 2
+        2 -> 3
+        else -> t
     }
 
-    private fun swap(pane: View, show: Boolean) {
+    private fun showTab(t: Int) {
+        val dir = if (order(t) >= order(tab)) 1 else -1
+        tab = t
+        TransitionManager.beginDelayedTransition(root)
+        header.visibility = if (t == 2 || t == 3) View.GONE else View.VISIBLE
+        updateChipsVisibility()
+        if (t == 2 || t == 3) fab.hide() else fab.show()
+        swap(paneContacts, t == 0, dir)
+        swap(paneFavorites, t == 1, dir)
+        swap(paneRecents, t == 3, dir)
+        swap(paneDialpad, t == 2, dir)
+    }
+
+    private fun swap(pane: View, show: Boolean, dir: Int = 1) {
         if (show) {
             if (pane.visibility != View.VISIBLE) {
                 pane.alpha = 0f
+                pane.translationX = dir * Ui.dp(this, 28).toFloat()
                 pane.visibility = View.VISIBLE
-                pane.animate().alpha(1f).setDuration(160).start()
+                pane.animate().alpha(1f).translationX(0f).setDuration(200).start()
             }
         } else {
+            pane.animate().cancel()
+            pane.translationX = 0f
             pane.visibility = View.GONE
         }
     }
@@ -214,6 +273,7 @@ class MainActivity : AppCompatActivity() {
             val loaded = ContactsRepository.loadAll(this)
             val g = ContactsRepository.loadGroups(this)
             val sorted = SearchEngine.sorted(loaded, Prefs.sortByLast(this))
+            val calls = CallLogRepository.load(this, loaded)
             runOnUiThread {
                 all = loaded
                 groups = g
@@ -221,6 +281,7 @@ class MainActivity : AppCompatActivity() {
                 rebuildChips()
                 applyFilter()
                 dialpad.setContacts(sorted)
+                recents.setData(calls, CallLogRepository.hasPermission(this))
             }
         }.start()
     }
