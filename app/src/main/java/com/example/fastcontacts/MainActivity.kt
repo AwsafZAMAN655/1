@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         paneContacts = findViewById(R.id.paneContacts)
         paneDialpad = findViewById(R.id.paneDialpad)
         emptyContacts = findViewById(R.id.emptyContacts)
-        emptyFav = findViewById(R.id.emptyDialpad)
+        // emptyFav = findViewById(R.id.emptyDialpad)
         emptyPermission = findViewById(R.id.emptyPermission)
         index = findViewById(R.id.alphabetIndex)
         bubble = findViewById(R.id.letterBubble)
