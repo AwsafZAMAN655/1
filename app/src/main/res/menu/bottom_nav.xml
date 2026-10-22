@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/nav_dialer_recents"
+        android:icon="@drawable/ic_dialpad"
+        android:title="Dialer & Recents" />
+    <item
         android:id="@+id/nav_contacts"
         android:icon="@drawable/ic_people"
         android:title="Contacts" />
-    <item
-        android:id="@+id/nav_favorites"
-        android:icon="@drawable/ic_star"
-        android:title="Favorites" />
-    <item
-        android:id="@+id/nav_recents"
-        android:icon="@drawable/ic_history"
-        android:title="Recents" />
-    <item
-        android:id="@+id/nav_dialpad"
-        android:icon="@drawable/ic_dialpad"
-        android:title="Dialpad" />
 </menu>
