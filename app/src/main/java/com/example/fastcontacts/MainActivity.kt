@@ -88,7 +88,6 @@ class MainActivity : AppCompatActivity() {
         favList = findViewById(R.id.favList)
         paneContacts = findViewById(R.id.paneContacts)
         paneDialpad = findViewById(R.id.paneDialpad)
-        paneDialpad = findViewById(R.id.paneDialpad)
         emptyContacts = findViewById(R.id.emptyContacts)
         emptyFav = findViewById(R.id.emptyDialpad)
         emptyPermission = findViewById(R.id.emptyPermission)
@@ -136,7 +135,7 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_contacts -> showTab(0)
                 R.id.nav_dialer_recents -> showTab(1)
-                R.id.nav_dialer_recents -> showTab(2)
+                // R.id.nav_dialer_recents -> showTab(2) removed
             }
             true
         }
@@ -189,7 +188,7 @@ class MainActivity : AppCompatActivity() {
         if (t == 2) fab.hide() else fab.show()
         swap(paneContacts, t == 0)
         swap(paneDialpad, t == 1)
-        swap(paneDialpad, t == 2)
+        // swap(paneDialpad, t == 2) removed
     }
 
     private fun swap(pane: View, show: Boolean) {
