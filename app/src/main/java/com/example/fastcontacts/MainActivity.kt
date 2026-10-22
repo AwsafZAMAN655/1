@@ -136,8 +136,8 @@ class MainActivity : AppCompatActivity() {
         nav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_contacts -> showTab(0)
-                R.id.nav_favorites -> showTab(1)
-                R.id.nav_dialpad -> showTab(2)
+                R.id.nav_dialer_recents -> showTab(1)
+                R.id.nav_dialer_recents -> showTab(2)
             }
             true
         }
